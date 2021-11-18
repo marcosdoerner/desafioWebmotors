@@ -1,0 +1,126 @@
+﻿@model Teste.WebMotors.Web.Models.AnuncioViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Atualizar Anúncio</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control"  readonly />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Marca" class="control-label"></label>
+                <div>
+                    @Html.DropDownListFor(m => m.MarcaId, new SelectList(ViewBag.marcas, "ID", "Name"), " ", htmlAttributes: new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.Marca)
+                    @Html.ValidationMessageFor(m => m.Marca, "", new { @class = "text-danger" })
+                    <span asp-validation-for="Marca" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Modelo" class="control-label"></label>
+                <div>
+                    @Html.DropDownListFor(m => m.ModeloId, new SelectList(ViewBag.modelos, "ID", "Name"), " ", htmlAttributes: new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.Modelo)
+                    @Html.ValidationMessageFor(m => m.Modelo, "", new { @class = "text-danger" })
+                    <span asp-validation-for="Modelo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Versao" class="control-label"></label>
+                <div>
+                    @Html.DropDownListFor(m => m.VersaoId, new SelectList(ViewBag.versoes, "ID", "Name"), " ", htmlAttributes: new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.Versao)
+                    @Html.ValidationMessageFor(m => m.Versao, "", new { @class = "text-danger" })
+                    <span asp-validation-for="Versao" class="text-danger"></span>
+                </div>
+            </div>
+
+@*            <div class="form-group">
+                <label asp-for="Marca" class="control-label"></label>
+                <input asp-for="Marca" class="form-control" />
+                <span asp-validation-for="Marca" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Modelo" class="control-label"></label>
+                <input asp-for="Modelo" class="form-control" />
+                <span asp-validation-for="Modelo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Versao" class="control-label"></label>
+                <input asp-for="Versao" class="form-control" />
+                <span asp-validation-for="Versao" class="text-danger"></span>
+            </div>
+*@
+<div class="form-group">
+                <label asp-for="Ano" class="control-label"></label>
+                <input asp-for="Ano" class="form-control" />
+                <span asp-validation-for="Ano" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quilometragem" class="control-label"></label>
+                <input asp-for="Quilometragem" class="form-control" />
+                <span asp-validation-for="Quilometragem" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observacao" class="control-label"></label>
+                <input asp-for="Observacao" class="form-control" />
+                <span asp-validation-for="Observacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $("#MarcaId").change(function () {
+            var select = document.getElementById('MarcaId');
+			var option = select.options[select.selectedIndex];
+            document.getElementById('Marca').value = option.text;
+            $.get("/Home/SelecionarModeloPorMarca", { marcaId: $("#MarcaId").val() }, function (data) {
+                $("#ModeloId").empty();
+                $("#ModeloId").append("<option value='"+"'>'"+"'</option>") 
+                $.each(data, function (index, row) {
+                    $("#ModeloId").append("<option value='" + row.id + "'>" + row.name + "</option>") 
+                });
+            });
+        })
+        ,
+        $("#ModeloId").change(function () {
+            var select = document.getElementById('ModeloId');
+			var option = select.options[select.selectedIndex];
+            document.getElementById('Modelo').value = option.text;
+            $.get("/Home/SelecionarVersaoPorModelo", { modelId: $("#ModeloId").val() }, function (data) {
+                $("#VersaoId").empty();
+                $("#VersaoId").append("<option value='"+"'>'"+"'</option>") 
+                $.each(data, function (index, row) {
+                    $("#VersaoId").append("<option value='" + row.id + "'>" + row.name+ "</option>") 
+                });
+            });
+        })
+        ,
+        $("#VersaoId").change(function () {
+            var select = document.getElementById('VersaoId');
+			var option = select.options[select.selectedIndex];
+            document.getElementById('Versao').value = option.text;
+        })
+    });
+</script>
+
